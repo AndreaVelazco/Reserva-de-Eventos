@@ -1,0 +1,4 @@
+<app-navbar *ngIf="mostrarNavbar"></app-navbar>
+<div class="main-content" [class.sidebar-open]="sidebarOpen && mostrarNavbar" [class.sin-navbar]="!mostrarNavbar">
+  <router-outlet></router-outlet>
+</div>

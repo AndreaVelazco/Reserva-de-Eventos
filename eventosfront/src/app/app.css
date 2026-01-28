@@ -1,0 +1,21 @@
+.main-content {
+  margin-top: 70px;
+  margin-left: 0;
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 70px);
+}
+
+.main-content.sidebar-open {
+  margin-left: 260px;
+}
+
+@media (max-width: 768px) {
+  .main-content.sidebar-open {
+    margin-left: 0;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+}

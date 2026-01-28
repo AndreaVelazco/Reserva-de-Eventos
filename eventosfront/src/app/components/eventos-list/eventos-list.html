@@ -1,0 +1,56 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Todos los Eventos</h2>
+    <button 
+      *ngIf="authService.isAdmin()" 
+      class="btn btn-primary"
+      routerLink="/evento-form">
+      Crear Nuevo Evento
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && eventos.length === 0" class="alert alert-info">
+    No hay eventos disponibles.
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let evento of eventos">
+      <div class="card h-100 shadow-sm" style="cursor: pointer;" (click)="verDetalle(evento.id)">
+        <div class="card-body">
+          <h5 class="card-title">{{ evento.nombre }}</h5>
+          <p class="card-text text-muted">
+            <small>📍 {{ evento.ubicacion }}</small><br>
+            <small>📅 {{ formatearFecha(evento.fecha) }}</small>
+          </p>
+          <p class="card-text">{{ evento.descripcion }}</p>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="badge bg-success">S/ {{ evento.precioEntrada }}</span>
+            <span class="badge" [class.bg-warning]="(evento.entradasDisponibles || 0) < 10" 
+                  [class.bg-info]="(evento.entradasDisponibles || 0) >= 10">
+              {{ evento.entradasDisponibles }} disponibles
+            </span>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent" *ngIf="authService.isAdmin()">
+          <button 
+            class="btn btn-sm btn-warning me-2"
+            (click)="editarEvento(evento.id, $event)">
+            Editar
+          </button>
+          <button 
+            class="btn btn-sm btn-danger"
+            (click)="eliminarEvento(evento.id, $event)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

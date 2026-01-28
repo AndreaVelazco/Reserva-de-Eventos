@@ -1,0 +1,291 @@
+.compra-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+/* Barra de progreso */
+.progreso-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.paso-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.paso-numero {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.paso-item.active .paso-numero {
+  background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%);
+  color: #2d3436;
+  box-shadow: 0 5px 15px rgba(168, 230, 207, 0.5);
+}
+
+.paso-item.completed .paso-numero {
+  background: linear-gradient(135deg, #ffd3a5 0%, #fd9a8b 100%);
+  color: #2d3436;
+}
+
+.paso-texto {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.paso-item.active .paso-texto {
+  color: #2d3436;
+}
+
+.paso-linea {
+  width: 100px;
+  height: 3px;
+  background: #e0e0e0;
+  margin: 0 20px;
+  transition: all 0.3s ease;
+}
+
+.paso-linea.completed {
+  background: linear-gradient(90deg, #ffd3a5 0%, #fd9a8b 100%);
+}
+
+/* Contenido de pasos */
+.paso-contenido {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Card de evento */
+.evento-info {
+  margin-bottom: 20px;
+}
+
+.evento-info .descripcion {
+  color: #666;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.detalles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.detalle-item i {
+  font-size: 1.5rem;
+}
+
+/* Input de cantidad */
+.cantidad-input {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Resumen card */
+.resumen-card {
+  top: 20px;
+}
+
+.resumen-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #666;
+}
+
+.resumen-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 15px 0;
+}
+
+.resumen-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.3rem;
+  color: #2d3436;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* Métodos de pago */
+.metodos-pago {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.metodo-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.metodo-item:hover {
+  border-color: #a8e6cf;
+  background: rgba(168, 230, 207, 0.1);
+}
+
+.metodo-item input[type="radio"] {
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
+  accent-color: #a8e6cf;
+}
+
+.metodo-item input[type="radio"]:checked ~ .metodo-content {
+  color: #2d3436;
+  font-weight: 700;
+}
+
+.metodo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+}
+
+.metodo-content i {
+  font-size: 1.5rem;
+}
+
+/* Confirmación */
+.confirmacion-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.confirmacion-icono {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.confirmacion-container h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2d3436;
+  margin-bottom: 10px;
+}
+
+.confirmacion-mensaje {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.confirmacion-detalle {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.detalle-compra {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detalle-compra.total {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d3436;
+  border-bottom: none;
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .progreso-bar {
+    padding: 20px 10px;
+  }
+
+  .paso-linea {
+    width: 50px;
+    margin: 0 10px;
+  }
+
+  .paso-texto {
+    font-size: 0.75rem;
+  }
+
+  .paso-numero {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .resumen-card {
+    position: relative !important;
+    top: 0 !important;
+    margin-top: 20px;
+  }
+}

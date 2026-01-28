@@ -1,0 +1,97 @@
+<div class="calendario-container">
+    <p class="subtitulo">{{ anioActual }}</p>
+  
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-light" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-white mt-3">Cargando eventos...</p>
+  </div>
+
+  <!-- VISTA DE MESES -->
+  <div *ngIf="!loading && vistaActual === 'meses'" class="vista-meses">
+    <div class="controles-año">
+      <button class="btn-control" (click)="irAnioActual()">Año Actual</button>
+      <div class="navegacion-año">
+        <button class="btn-arrow" (click)="cambiarAnio(-1)">‹</button>
+        <h2 class="año-actual">{{ anioActual }}</h2>
+        <button class="btn-arrow" (click)="cambiarAnio(1)">›</button>
+      </div>
+    </div>
+
+    <div class="grid-meses">
+      <div 
+        *ngFor="let mes of meses" 
+        class="mes-card"
+        [class.tiene-eventos]="mes.cantidadEventos > 0"
+        (click)="seleccionarMes(mes)">
+        <div class="mes-nombre">{{ mes.nombre }}</div>
+        <div class="mes-contador" *ngIf="mes.cantidadEventos > 0">
+          <div class="contador-numero">{{ mes.cantidadEventos }}</div>
+          <div class="contador-texto">
+            {{ mes.cantidadEventos === 1 ? 'evento' : 'eventos' }}
+          </div>
+        </div>
+        <div class="mes-vacio" *ngIf="mes.cantidadEventos === 0">
+          Sin eventos
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISTA DE EVENTOS DEL MES SELECCIONADO -->
+  <div *ngIf="!loading && vistaActual === 'eventos' && mesSeleccionado" class="vista-eventos">
+    <div class="eventos-header">
+      <button class="btn-volver" (click)="volverAMeses()">
+         Volver
+      </button>
+      <h2 class="mes-titulo">{{ mesSeleccionado.nombre }} {{ anioActual }}</h2>
+      <div class="contador-eventos">
+        {{ mesSeleccionado.cantidadEventos }} 
+        {{ mesSeleccionado.cantidadEventos === 1 ? 'Evento' : 'Eventos' }}
+      </div>
+    </div>
+
+    <div *ngIf="mesSeleccionado.cantidadEventos === 0" class="sin-eventos">
+      
+      <h3>No hay eventos en {{ mesSeleccionado.nombre }}</h3>
+      <p>Este mes no tiene eventos programados</p>
+    </div>
+
+    <div class="lista-eventos">
+      <div 
+        *ngFor="let evento of mesSeleccionado.eventos" 
+        class="evento-card"
+        [style.border-left-color]="evento.color"
+        (click)="verEvento(evento.id)">
+        
+        <div class="evento-fecha" [style.background]="evento.color">
+          <div class="fecha-dia">{{ formatearDia(evento.fecha) }}</div>
+          <div class="fecha-hora">{{ formatearHora(evento.fecha) }}</div>
+        </div>
+
+        <div class="evento-info">
+          <h3 class="evento-titulo">{{ evento.nombre }}</h3>
+          <p class="evento-descripcion">{{ evento.descripcion }}</p>
+          <div class="evento-detalles">
+            <span class="detalle">
+              <i>📍</i> {{ evento.ubicacion }}
+            </span>
+            <span class="detalle">
+              S/ {{ evento.precioEntrada }}
+            </span>
+            <span 
+              class="detalle disponibilidad" 
+              [class.pocas]="(evento.entradasDisponibles || 0) < 10"
+              [class.agotado]="(evento.entradasDisponibles || 0) === 0">
+              {{ evento.entradasDisponibles }} disponibles
+            </span>
+          </div>
+        </div>
+
+        <div class="evento-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>

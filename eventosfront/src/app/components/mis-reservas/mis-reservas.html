@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <h2 class="mb-4">
+    {{ authService.isAdmin() ? 'Todas las Reservas' : 'Mis Reservas' }}
+  </h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && reservas.length === 0" class="alert alert-info">
+    No hay reservas. <a routerLink="/eventos">Explora eventos disponibles</a>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4" *ngFor="let reserva of reservas">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>{{ reserva.eventoNombre }}</strong>
+          <span class="badge" [ngClass]="getEstadoBadgeClass(reserva.estado)">
+            {{ reserva.estado }}
+          </span>
+        </div>
+        <div class="card-body">
+          <p class="mb-2" *ngIf="authService.isAdmin()">
+            <strong>Cliente:</strong> {{ reserva.usuarioNombre }}
+          </p>
+          <p class="mb-2">
+            <strong>Fecha del Evento:</strong><br>
+            {{ formatearFecha(reserva.eventoFecha) }}
+          </p>
+          <p class="mb-2">
+            <strong>Cantidad:</strong> {{ reserva.cantidadEntradas }} entrada(s)
+          </p>
+          <p class="mb-2">
+            <strong>Total Pagado:</strong> S/ {{ reserva.montoTotal }}
+          </p>
+          <p class="mb-2 text-muted">
+            <small>Reservado: {{ formatearFecha(reserva.fechaReserva) }}</small>
+          </p>
+
+          <button 
+  *ngIf="!authService.isAdmin() && reserva.estado === 'PENDIENTE'"
+  class="btn btn-sm btn-success me-2"
+  (click)="pagarReserva(reserva.id)">
+  Pagar Ahora
+</button>
+
+<button 
+  *ngIf="!authService.isAdmin() && reserva.estado === 'CONFIRMADA'"
+  class="btn btn-sm btn-danger"
+  (click)="cancelarReserva(reserva.id)">
+  Cancelar Reserva
+</button>
+
+<button 
+  *ngIf="!authService.isAdmin() && reserva.estado === 'PENDIENTE'"
+  class="btn btn-sm btn-danger"
+  (click)="cancelarReserva(reserva.id)">
+  Cancelar Reserva
+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,289 @@
+<div class="compra-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && evento" class="compra-content">
+    <!-- Barra de progreso -->
+    <div class="progreso-bar" *ngIf="tipoOperacion === 'compra'">
+      <div class="paso-item" [class.active]="pasoActual >= 1" [class.completed]="pasoActual > 1">
+        <div class="paso-numero">1</div>
+        <div class="paso-texto">Selección</div>
+      </div>
+      <div class="paso-linea" [class.completed]="pasoActual > 1"></div>
+      <div class="paso-item" [class.active]="pasoActual >= 2" [class.completed]="pasoActual > 2">
+        <div class="paso-numero">2</div>
+        <div class="paso-texto">Pago</div>
+      </div>
+      <div class="paso-linea" [class.completed]="pasoActual > 2"></div>
+      <div class="paso-item" [class.active]="pasoActual >= 3">
+        <div class="paso-numero">3</div>
+        <div class="paso-texto">Confirmación</div>
+      </div>
+    </div>
+
+    <!-- Barra simple para reserva -->
+    <div class="progreso-bar" *ngIf="tipoOperacion === 'reserva'">
+      <div class="paso-item" [class.active]="pasoActual >= 1" [class.completed]="pasoActual > 1">
+        <div class="paso-numero">1</div>
+        <div class="paso-texto">Selección</div>
+      </div>
+      <div class="paso-linea" [class.completed]="pasoActual > 1"></div>
+      <div class="paso-item" [class.active]="pasoActual >= 3">
+        <div class="paso-numero">2</div>
+        <div class="paso-texto">Confirmación</div>
+      </div>
+    </div>
+
+    <!-- PASO 1: Selección de entradas -->
+    <div *ngIf="pasoActual === 1" class="paso-contenido fade-in">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="card evento-info">
+            <div class="card-header">
+              <h4>{{ tipoOperacion === 'compra' ? 'Compra de Entradas' : 'Reserva de Entradas' }}</h4>
+            </div>
+            <div class="card-body">
+              <h3>{{ evento.nombre }}</h3>
+              <p class="descripcion">{{ evento.descripcion }}</p>
+              <div class="detalles-list">
+                <div class="detalle-item">
+                  <i></i>
+                  <span>{{ formatearFecha(evento.fecha) }}</span>
+                </div>
+                <div class="detalle-item">
+                  <i></i>
+                  <span>{{ evento.ubicacion }}</span>
+                </div>
+                <div class="detalle-item">
+                  <i></i>
+                  <span>{{ evento.entradasDisponibles }} entradas disponibles</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mt-3">
+            <div class="card-header">
+              <h4>Selecciona tus Entradas</h4>
+            </div>
+            <div class="card-body">
+              <label class="form-label">Cantidad de entradas</label>
+              <input 
+                type="number" 
+                class="form-control cantidad-input"
+                [(ngModel)]="cantidadEntradas"
+                min="1"
+                [max]="evento.entradasDisponibles || 0">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="card resumen-card sticky-top">
+            <div class="card-header">
+              <h4>Resumen</h4>
+            </div>
+            <div class="card-body">
+              <div class="resumen-item">
+                <span>Precio por entrada:</span>
+                <strong>S/ {{ evento.precioEntrada }}</strong>
+              </div>
+              <div class="resumen-item">
+                <span>Cantidad:</span>
+                <strong>{{ cantidadEntradas }}</strong>
+              </div>
+              <div class="resumen-divider"></div>
+              <div class="resumen-item">
+                <span>Subtotal:</span>
+                <strong>S/ {{ calcularSubtotal() }}</strong>
+              </div>
+              <div class="resumen-item" *ngIf="tipoOperacion === 'compra'">
+                <span>Comisión (5%):</span>
+                <strong>S/ {{ calcularComision().toFixed(2) }}</strong>
+              </div>
+              <div class="resumen-divider"></div>
+              <div class="resumen-total">
+                <span>Total:</span>
+                <strong>S/ {{ calcularTotal().toFixed(2) }}</strong>
+              </div>
+
+              <div class="alert alert-danger mt-3" *ngIf="errorMessage">
+                {{ errorMessage }}
+              </div>
+
+              <button 
+                class="btn w-100 mt-3"
+                [class.btn-primary]="tipoOperacion === 'compra'"
+                [class.btn-warning]="tipoOperacion === 'reserva'"
+                (click)="siguientePaso()">
+                {{ tipoOperacion === 'compra' ? 'Continuar al Pago' : 'Confirmar Reserva' }}
+              </button>
+              <button class="btn btn-secondary w-100 mt-2" [routerLink]="['/eventos', evento.id]">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: Pago (solo para compra) -->
+    <div *ngIf="pasoActual === 2 && tipoOperacion === 'compra'" class="paso-contenido fade-in">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="card">
+            <div class="card-header">
+              <h4>Método de Pago</h4>
+            </div>
+            <div class="card-body">
+              <div class="metodos-pago">
+                <label class="metodo-item">
+                  <input type="radio" name="metodoPago" value="tarjeta" [(ngModel)]="metodoPago">
+                  <div class="metodo-content">
+                    <i></i>
+                    <span>Tarjeta de Crédito/Débito</span>
+                  </div>
+                </label>
+                <label class="metodo-item">
+                  <input type="radio" name="metodoPago" value="yape" [(ngModel)]="metodoPago">
+                  <div class="metodo-content">
+                    <i></i>
+                    <span>Yape / Plin</span>
+                  </div>
+                </label>
+                <label class="metodo-item">
+                  <input type="radio" name="metodoPago" value="transferencia" [(ngModel)]="metodoPago">
+                  <div class="metodo-content">
+                    <i></i>
+                    <span>Transferencia Bancaria</span>
+                  </div>
+                </label>
+              </div>
+
+              <div *ngIf="metodoPago === 'tarjeta'" class="mt-4">
+                <div class="mb-3">
+                  <label class="form-label">Nombre del Titular</label>
+                  <input type="text" class="form-control" [(ngModel)]="datosPago.nombreTitular" placeholder="Como aparece en la tarjeta">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Número de Tarjeta</label>
+                  <input type="text" class="form-control" [(ngModel)]="datosPago.numeroTarjeta" maxlength="16" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Fecha de Vencimiento</label>
+                    <input type="text" class="form-control" [(ngModel)]="datosPago.fechaVencimiento" placeholder="MM/AA">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">CVV</label>
+                    <input type="text" class="form-control" [(ngModel)]="datosPago.cvv" maxlength="3" placeholder="123">
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="metodoPago === 'yape'" class="alert alert-info mt-4">
+                <strong>Instrucciones:</strong> Realiza la transferencia al número <strong>987-654-321</strong>.
+              </div>
+
+              <div *ngIf="metodoPago === 'transferencia'" class="alert alert-info mt-4">
+                <strong>Cuenta BCP:</strong> 123-456789-0-10
+              </div>
+
+              <div class="alert alert-danger mt-3" *ngIf="errorMessage">
+                {{ errorMessage }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="card resumen-card sticky-top">
+            <div class="card-header">
+              <h4>Resumen</h4>
+            </div>
+            <div class="card-body">
+              <h6 class="mb-3">{{ evento.nombre }}</h6>
+              <div class="resumen-item">
+                <span>{{ cantidadEntradas }} x S/ {{ evento.precioEntrada }}</span>
+                <strong>S/ {{ calcularSubtotal() }}</strong>
+              </div>
+              <div class="resumen-item">
+                <span>Comisión:</span>
+                <strong>S/ {{ calcularComision().toFixed(2) }}</strong>
+              </div>
+              <div class="resumen-divider"></div>
+              <div class="resumen-total">
+                <span>Total a pagar:</span>
+                <strong>S/ {{ calcularTotal().toFixed(2) }}</strong>
+              </div>
+
+              <button 
+                class="btn btn-success w-100 mt-3" 
+                (click)="siguientePaso()"
+                [disabled]="procesando">
+                <span *ngIf="procesando" class="spinner-border spinner-border-sm me-2"></span>
+                {{ procesando ? 'Procesando...' : 'Confirmar Compra' }}
+              </button>
+              <button class="btn btn-secondary w-100 mt-2" (click)="pasoAnterior()" [disabled]="procesando">
+                Volver
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3: Confirmación -->
+    <div *ngIf="pasoActual === 3" class="paso-contenido fade-in">
+      <div class="confirmacion-container">
+        <div class="confirmacion-icono"></div>
+        <h2>{{ tipoOperacion === 'compra' ? '¡Compra Exitosa!' : '¡Reserva Exitosa!' }}</h2>
+        <p class="confirmacion-mensaje">
+          {{ tipoOperacion === 'compra' 
+            ? 'Tu compra ha sido procesada correctamente' 
+            : 'Tu reserva ha sido creada. Tienes 24 horas para completar el pago.' }}
+        </p>
+        
+        <div class="card confirmacion-detalle">
+          <div class="card-body">
+            <h5>Detalles de tu {{ tipoOperacion === 'compra' ? 'compra' : 'reserva' }}</h5>
+            <div class="detalle-compra">
+              <strong>Evento:</strong>
+              <span>{{ evento.nombre }}</span>
+            </div>
+            <div class="detalle-compra">
+              <strong>Fecha:</strong>
+              <span>{{ formatearFecha(evento.fecha) }}</span>
+            </div>
+            <div class="detalle-compra">
+              <strong>Ubicación:</strong>
+              <span>{{ evento.ubicacion }}</span>
+            </div>
+            <div class="detalle-compra">
+              <strong>Cantidad:</strong>
+              <span>{{ cantidadEntradas }} entrada(s)</span>
+            </div>
+            <div class="detalle-compra total">
+              <strong>Total {{ tipoOperacion === 'compra' ? 'pagado' : 'a pagar' }}:</strong>
+              <span>S/ {{ calcularTotal().toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info mt-4">
+          <strong>Importante:</strong> Hemos enviado la confirmación a tu correo electrónico.
+        </div>
+
+        <button class="btn btn-primary btn-lg mt-4" (click)="irAMisReservas()">
+          Ver Mis Reservas
+        </button>
+        <button class="btn btn-secondary btn-lg mt-2" routerLink="/eventos">
+          Volver a Eventos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

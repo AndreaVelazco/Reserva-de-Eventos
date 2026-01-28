@@ -1,0 +1,66 @@
+<!-- Top Header -->
+<div class="top-header">
+  <button class="hamburger-btn" (click)="toggleSidebar()">
+    <span [class.open]="sidebarOpen"></span>
+    <span [class.open]="sidebarOpen"></span>
+    <span [class.open]="sidebarOpen"></span>
+  </button>
+  
+  <div class="header-title">
+    <span class="emoji"></span>
+    <h1>Sistema de Eventos</h1>
+  </div>
+
+  <div class="header-user" *ngIf="authService.isAuthenticated()">
+    <div class="user-avatar">
+      {{ currentUser?.nombre?.charAt(0) }}
+    </div>
+    <div class="user-info">
+      <span class="user-name">{{ currentUser?.nombre }}</span>
+      <span class="user-role" [class.admin]="authService.isAdmin()">
+        {{ currentUser?.rol }}
+      </span>
+    </div>
+  </div>
+
+  <div class="header-auth" *ngIf="!authService.isAuthenticated()">
+    <button class="btn-auth" routerLink="/login">Iniciar Sesión</button>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="sidebar" [class.open]="sidebarOpen">
+  <div class="sidebar-menu">
+    <a routerLink="/eventos" routerLinkActive="active" class="menu-item">
+    
+      <span>Eventos</span>
+    </a>
+
+    <a routerLink="/calendario" routerLinkActive="active" class="menu-item">
+    
+      <span>Calendario</span>
+    </a>
+
+    <a *ngIf="authService.isAuthenticated()" routerLink="/mis-reservas" routerLinkActive="active" class="menu-item">
+    
+      <span>{{ authService.isAdmin() ? 'Todas las Reservas' : 'Mis Reservas' }}</span>
+    </a>
+
+    <a *ngIf="authService.isAdmin()" routerLink="/evento-form" routerLinkActive="active" class="menu-item">
+      <span>Crear Evento</span>
+    </a>
+
+    <div class="menu-divider" *ngIf="!authService.isAuthenticated()"></div>
+
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/register" routerLinkActive="active" class="menu-item">
+      <span>Registrarse</span>
+    </a>
+
+    <div class="menu-divider" *ngIf="authService.isAuthenticated()"></div>
+
+    <a *ngIf="authService.isAuthenticated()" href="#" (click)="logout()" class="menu-item logout">
+      
+      <span>Cerrar Sesión</span>
+    </a>
+  </div>
+</nav>

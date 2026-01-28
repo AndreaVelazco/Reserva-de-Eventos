@@ -1,0 +1,478 @@
+.calendario-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.calendario-header {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeInDown 0.6s ease;
+}
+
+.titulo-principal {
+  font-size: 3rem;
+  font-weight: 800;
+  color: black;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.titulo-principal .emoji {
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.subtitulo {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin: 0;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* VISTA DE MESES */
+.vista-meses {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.controles-año {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-control {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.btn-control:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.navegacion-año {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.btn-arrow {
+  background: white;
+  border: 2px solid #e0e0e0;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.btn-arrow:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: scale(1.1);
+}
+
+.año-actual {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #333;
+  margin: 0;
+  min-width: 150px;
+  text-align: center;
+}
+
+/* Grid de meses */
+.grid-meses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.mes-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 30px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.mes-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.mes-card:hover::before {
+  transform: scaleX(1);
+}
+
+.mes-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.mes-card.tiene-eventos {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.mes-nombre {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mes-contador {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.contador-numero {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.contador-texto {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mes-vacio {
+  font-size: 1rem;
+  color: #999;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+/* VISTA DE EVENTOS */
+.vista-eventos {
+  animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.eventos-header {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.btn-volver {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.btn-volver:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.mes-titulo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #333;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.contador-eventos {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.sin-eventos {
+  text-align: center;
+  padding: 100px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.icono-vacio {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.sin-eventos h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.sin-eventos p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Lista de eventos */
+.lista-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.evento-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid;
+}
+
+.evento-card:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.evento-fecha {
+  min-width: 100px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fecha-dia {
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.fecha-hora {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.evento-info {
+  flex: 1;
+}
+
+.evento-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.evento-descripcion {
+  color: #666;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.evento-detalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.detalle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.detalle i {
+  font-style: normal;
+  font-size: 1.2rem;
+}
+
+.disponibilidad {
+  padding: 6px 15px;
+  border-radius: 20px;
+  background: #d4edda;
+  color: #155724;
+  font-weight: 600;
+}
+
+.disponibilidad.pocas {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.disponibilidad.agotado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.evento-arrow {
+  font-size: 2rem;
+  color: #ccc;
+  transition: all 0.3s ease;
+}
+
+.evento-card:hover .evento-arrow {
+  color: #667eea;
+  transform: translateX(8px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calendario-container {
+    padding: 20px 10px;
+  }
+
+  .titulo-principal {
+    font-size: 2rem;
+  }
+
+  .controles-año {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .grid-meses {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .mes-card {
+    padding: 25px 15px;
+  }
+
+  .mes-nombre {
+    font-size: 1.3rem;
+  }
+
+  .contador-numero {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+
+  .eventos-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mes-titulo {
+    font-size: 1.5rem;
+  }
+
+  .evento-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .evento-arrow {
+    display: none;
+  }
+}

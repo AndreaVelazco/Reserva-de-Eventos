@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <button class="btn btn-secondary mb-3" routerLink="/eventos">
+    Volver a Eventos
+  </button>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && evento" class="card">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">{{ evento.nombre }}</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <h5>Descripción</h5>
+          <p>{{ evento.descripcion }}</p>
+          
+          <h5 class="mt-4">Ubicación</h5>
+          <p>{{ evento.ubicacion }}</p>
+          
+          <h5 class="mt-4">Fecha y Hora</h5>
+          <p>{{ formatearFecha(evento.fecha) }}</p>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h5 class="card-title">Información de Entradas</h5>
+              <hr>
+              <p><strong>Precio:</strong> S/ {{ evento.precioEntrada }}</p>
+              <p><strong>Capacidad Total:</strong> {{ evento.capacidadTotal }}</p>
+              <p>
+                <strong>Disponibles:</strong> 
+                <span class="badge" 
+                      [class.bg-success]="(evento.entradasDisponibles || 0) >= 10"
+                      [class.bg-warning]="(evento.entradasDisponibles || 0) < 10 && (evento.entradasDisponibles || 0) > 0"
+                      [class.bg-danger]="(evento.entradasDisponibles || 0) === 0">
+                  {{ evento.entradasDisponibles }}
+                </span>
+              </p>
+              
+              <hr>
+
+<div class="d-flex flex-column gap-2">
+  <button 
+    *ngIf="authService.isAuthenticated() && !authService.isAdmin() && (evento.entradasDisponibles || 0) > 0"
+    class="btn btn-success w-100"
+    (click)="comprar()">
+    Comprar Ahora
+  </button>
+  
+  <button 
+    *ngIf="authService.isAuthenticated() && !authService.isAdmin() && (evento.entradasDisponibles || 0) > 0"
+    class="btn btn-warning w-100"
+    (click)="reservar()">
+    Reservar (Sin Pagar)
+  </button>
+
+  <!-- Mensaje para admin -->
+  <div *ngIf="authService.isAuthenticated() && authService.isAdmin()" class="alert alert-info">
+    Como administrador, puedes gestionar eventos pero no realizar compras o reservas.
+  </div>
+  
+  <button 
+    *ngIf="!authService.isAuthenticated()"
+    class="btn btn-primary w-100"
+    routerLink="/login">
+    Inicia sesión para reservar o comprar
+  </button>
+  
+  <div *ngIf="(evento.entradasDisponibles || 0) === 0" class="alert alert-danger mt-3">
+    Entradas agotadas
+  </div>
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
