@@ -1,0 +1,33 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /ms-bootcamp
+
+spring:
+  application:
+    name: eventosback
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eventosback
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# JWT Configuration
+jwt:
+  secret: miClaveSecretaSuperSeguraParaEventos2024
+  expiration: 86400000
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
